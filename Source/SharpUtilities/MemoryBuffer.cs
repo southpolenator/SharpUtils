@@ -85,13 +85,14 @@ namespace SharpUtilities
             {
                 if (bytes == null)
                 {
-                    bytes = new byte[bytePointerLength];
+                    var bytes = new byte[bytePointerLength];
                     fixed (byte* destination = bytes)
                     {
                         byte* source = bytePointer;
 
                         MemoryBuffer.MemCpy(destination, source, (uint)bytes.Length);
                     }
+                    this.bytes = bytes;
                 }
 
                 return bytes;
