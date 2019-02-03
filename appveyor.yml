@@ -10,7 +10,7 @@ build_script:
   - cmd: dotnet build
   - cmd: dotnet pack
 test_script:
-  - cmd: xunit.console bin\Release\netcoreapp2.0\SharpUtils.Tests.dll /appveyor
+  - cmd: dotnet test
 artifacts:
 - path: bin\**\*.nupkg
   name: NuGets
