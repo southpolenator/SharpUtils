@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\SharedAssemblyInfo.props" />
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Source\SharpUtils\SharpUtils.csproj" />
+    <ProjectReference Include="$(EnlistmentRoot)Source\SharpUtils\SharpUtils.csproj" />
   </ItemGroup>
 
 </Project>
