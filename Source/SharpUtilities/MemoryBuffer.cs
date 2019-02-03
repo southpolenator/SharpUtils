@@ -9,6 +9,20 @@ namespace SharpUtilities
     public unsafe struct MemoryBuffer
     {
         /// <summary>
+        /// Delegate for C-style memcpy function.
+        /// </summary>
+        /// <param name="destination">Destination buffer.</param>
+        /// <param name="source">Source buffer.</param>
+        /// <param name="bytes">Number of bytes to be copied.</param>
+        public delegate void MemCpyFunction(void* destination, void* source, uint bytes);
+
+        /// <summary>
+        /// IL generated method that executes C-style memcpy function.
+        /// It is fastest implementation for memcpy in .NET.
+        /// </summary>
+        public static readonly MemCpyFunction MemCpy;
+
+        /// <summary>
         /// The memory buffer bytes
         /// </summary>
         private byte[] bytes;
@@ -22,10 +36,6 @@ namespace SharpUtilities
         /// The byte pointer length
         /// </summary>
         private readonly int bytePointerLength;
-
-        internal delegate void MemCpyFunction(void* des, void* src, uint bytes);
-
-        internal static readonly MemCpyFunction MemCpy;
 
         static MemoryBuffer()
         {
