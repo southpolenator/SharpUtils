@@ -1,0 +1,7 @@
+version: 1.0.{build}
+configuration: Release
+build_script:
+  - cmd: dotnet pack
+artifacts:
+- path: '**\bin\**\*.nupkg'
+  name: NuGets
