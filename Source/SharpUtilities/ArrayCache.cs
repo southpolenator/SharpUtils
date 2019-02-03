@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace SharpUtils
+namespace SharpUtilities
 {
     /// <summary>
     /// Helper class for caching objects inside the array. New object will be cached on the request.

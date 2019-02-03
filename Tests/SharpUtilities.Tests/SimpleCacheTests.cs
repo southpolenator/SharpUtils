@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace SharpUtils.Tests
+namespace SharpUtilities.Tests
 {
     public class SimpleCacheTests
     {

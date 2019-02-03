@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace SharpUtils
+namespace SharpUtilities
 {
     /// <summary>
     /// Helper class for caching results - it is being used as lazy evaluation

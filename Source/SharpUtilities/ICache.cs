@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace SharpUtils
+namespace SharpUtilities
 {
     /// <summary>
     /// Interface for all caching structures.

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace SharpUtils
+namespace SharpUtilities
 {
     /// <summary>
     /// Helper class that is used to collect caches that needs to be invalidated on particular event.

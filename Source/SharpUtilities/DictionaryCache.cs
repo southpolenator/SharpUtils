@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace SharpUtils
+namespace SharpUtilities
 {
     /// <summary>
     /// Helper class for caching objects inside the dictionary. New object will be cached on the request.

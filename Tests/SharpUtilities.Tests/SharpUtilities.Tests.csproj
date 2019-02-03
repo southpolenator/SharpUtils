@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(EnlistmentRoot)Source\SharpUtils\SharpUtils.csproj" />
+    <ProjectReference Include="$(EnlistmentRoot)Source\SharpUtilities\SharpUtilities.csproj" />
   </ItemGroup>
 
 </Project>

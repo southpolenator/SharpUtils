@@ -4,6 +4,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageId>SharpUtilities</PackageId>
 
     <!-- Nuget properties -->
     <Description>Collection of utility classes used by Sharp* projects...</Description>

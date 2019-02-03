@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection.Emit;
 
-namespace SharpUtils
+namespace SharpUtilities
 {
     /// <summary>
     /// Helper structure that holds pointer to memory buffer or byte array
