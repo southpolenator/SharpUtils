@@ -22,6 +22,6 @@
 
   <!-- Nuget license file -->
   <ItemGroup>
-    <None Include="$(EnlistmentRoot)license.txt" Pack="true" PackagePath=""/>
+    <None Include="$(EnlistmentRoot)LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>
 </Project>
