@@ -1,4 +1,4 @@
-# SharpUtilitiess
+# SharpUtilities
 Collection of utility classes used by Sharp* projects.
 
 ## Latest status
