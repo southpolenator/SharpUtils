@@ -27,16 +27,6 @@ namespace SharpUtilities
         /// </summary>
         private byte[] bytes;
 
-        /// <summary>
-        /// The byte pointer
-        /// </summary>
-        private readonly byte* bytePointer;
-
-        /// <summary>
-        /// The byte pointer length
-        /// </summary>
-        private readonly int bytePointerLength;
-
         static MemoryBuffer()
         {
             var dynamicMethod = new DynamicMethod
@@ -65,11 +55,9 @@ namespace SharpUtilities
         /// <param name="bytes">The bytes.</param>
         public MemoryBuffer(byte[] bytes)
         {
-            if (bytes == null)
-                throw new ArgumentNullException(nameof(bytes));
-            this.bytes = bytes;
-            bytePointer = null;
-            bytePointerLength = -1;
+            this.bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
+            BytePointer = null;
+            BytePointerLength = -1;
         }
 
         /// <summary>
@@ -81,9 +69,9 @@ namespace SharpUtilities
         {
             if (bytePointer == null)
                 throw new ArgumentNullException(nameof(bytePointer));
-            this.bytePointer = bytePointer;
-            bytePointerLength = length;
-            this.bytes = null;
+            BytePointer = bytePointer;
+            BytePointerLength = length;
+            bytes = null;
         }
 
         /// <summary>
@@ -95,12 +83,12 @@ namespace SharpUtilities
             {
                 if (bytes == null)
                 {
-                    var bytes = new byte[bytePointerLength];
+                    var bytes = new byte[BytePointerLength];
                     fixed (byte* destination = bytes)
                     {
-                        byte* source = bytePointer;
+                        byte* source = BytePointer;
 
-                        MemoryBuffer.MemCpy(destination, source, (uint)bytes.Length);
+                        MemCpy(destination, source, (uint)bytes.Length);
                     }
                     this.bytes = bytes;
                 }
@@ -112,11 +100,11 @@ namespace SharpUtilities
         /// <summary>
         /// Gets the byte pointer.
         /// </summary>
-        public byte* BytePointer => bytePointer;
+        public byte* BytePointer { get; private set; }
 
         /// <summary>
         /// Gets the length of the memory buffer where byte pointer points.
         /// </summary>
-        public int BytePointerLength => bytePointerLength;
+        public int BytePointerLength { get; private set; }
     }
 }
