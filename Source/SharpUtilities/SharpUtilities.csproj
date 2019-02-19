@@ -2,7 +2,7 @@
   <Import Project="..\..\SharedAssemblyInfo.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFrameworks>netstandard1.3;netstandard2.0;net45</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageId>SharpUtilities</PackageId>
 
@@ -11,9 +11,17 @@
     <Summary>Collection of utility classes used by Sharp* projects...</Summary>
   </PropertyGroup>
 
-  <ItemGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
+    <DefineConstants>$(DefineConstants);NET45</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <PackageReference Include="System.IO.MemoryMappedFiles" Version="4.3.0" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
   </ItemGroup>
 

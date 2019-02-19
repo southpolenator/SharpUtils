@@ -39,7 +39,11 @@ namespace SharpUtilities
             {
                 fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 Length = fileStream.Length;
+#if NET45
+                memoryMappedFile = MemoryMappedFile.CreateFromFile(fileStream, null, Length, MemoryMappedFileAccess.Read, null, HandleInheritability.Inheritable, false);
+#else
                 memoryMappedFile = MemoryMappedFile.CreateFromFile(fileStream, null, Length, MemoryMappedFileAccess.Read, HandleInheritability.Inheritable, false);
+#endif
                 stream = memoryMappedFile.CreateViewStream(0, Length, MemoryMappedFileAccess.Read);
                 stream.SafeMemoryMappedViewHandle.AcquirePointer(ref basePointer);
             }
