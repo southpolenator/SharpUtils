@@ -26,4 +26,18 @@
   <ItemGroup>
     <None Include="$(EnlistmentRoot)LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>
+
+  <!-- Solving problem with non-Windows builds or not installed .net framework -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45' AND '$(MSBuildRuntimeType)' == 'Core' AND '$(OS)' != 'Windows_NT'">
+    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.5" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" GeneratePathProperty="true" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net45' AND '$(MSBuildRuntimeType)' == 'Core' AND '$(OS)' != 'Windows_NT' AND '$(NuGetPackageRoot)' != ''">
+    <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.5\1.0.1\lib\net45\</FrameworkPathOverride>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461' AND '$(MSBuildRuntimeType)' == 'Core' AND '$(OS)' != 'Windows_NT'">
+    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.6.1" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" GeneratePathProperty="true" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461' AND '$(MSBuildRuntimeType)' == 'Core' AND '$(OS)' != 'Windows_NT' AND '$(NuGetPackageRoot)' != ''">
+    <FrameworkPathOverride>$(NuGetPackageRoot)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
+  </PropertyGroup>
 </Project>
