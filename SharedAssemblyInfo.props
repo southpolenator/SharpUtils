@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
     <!-- Nuget properties -->
-    <AssemblyVersion>1.4</AssemblyVersion>
-    <FileVersion>1.4</FileVersion>
-    <VersionPrefix>1.4</VersionPrefix>
+    <AssemblyVersion>1.4.1</AssemblyVersion>
+    <FileVersion>1.4.1</FileVersion>
+    <VersionPrefix>1.4.1</VersionPrefix>
     <Authors>SharpStar Team</Authors>
     <Copyright>Copyright (C) SharpStar team 2015-2019</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -20,6 +20,10 @@
     <!-- Enable embedding pdb -->
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
+
+    <!-- Singing assemblies -->
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(EnlistmentRoot)\Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <!-- Nuget license file -->
