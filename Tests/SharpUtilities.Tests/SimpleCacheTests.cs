@@ -87,6 +87,22 @@ namespace SharpUtilities.Tests
             Assert.Equal(42, cache3.Value);
             Assert.Equal(1, count);
         }
+
+        [Fact]
+        public void Disposable()
+        {
+            int disposedCount = 0;
+            using (SimpleCache<DisposableAction> cache = SimpleCache.Create(() => new DisposableAction(() => disposedCount++)))
+            {
+                var v0 = cache.Value;
+
+                cache.InvalidateCache();
+                Assert.Equal(1, disposedCount);
+
+                var v1 = cache.Value;
+            }
+            Assert.Equal(2, disposedCount);
+        }
     }
 
     public class SimpleCacheStructTests
@@ -174,6 +190,22 @@ namespace SharpUtilities.Tests
             Assert.True(cache3.Cached);
             Assert.Equal(42, cache3.Value);
             Assert.Equal(2, count);
+        }
+
+        [Fact]
+        public void Disposable()
+        {
+            int disposedCount = 0;
+            using (SimpleCacheStruct<DisposableAction> cache = SimpleCache.CreateStruct(() => new DisposableAction(() => disposedCount++)))
+            {
+                var v0 = cache.Value;
+
+                cache.InvalidateCache();
+                Assert.Equal(1, disposedCount);
+
+                var v1 = cache.Value;
+            }
+            Assert.Equal(2, disposedCount);
         }
     }
 }

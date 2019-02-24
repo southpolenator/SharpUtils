@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SharpUtilities
 {
@@ -32,11 +33,20 @@ namespace SharpUtilities
         }
 
         /// <summary>
-        /// Clears this cache.
+        /// Removes all items from this cache.
         /// </summary>
         public void Clear()
         {
-            values.Clear();
+            if (typeof(IDisposable).IsAssignableFrom(typeof(TValue)))
+            {
+                ConcurrentDictionary<TKey, TValue> valuesToBeDisposed = values;
+
+                values = new ConcurrentDictionary<TKey, TValue>();
+                foreach (IDisposable value in valuesToBeDisposed.Values)
+                    value.Dispose();
+            }
+            else
+                values.Clear();
         }
 
         /// <summary>
@@ -139,6 +149,14 @@ namespace SharpUtilities
         public void InvalidateCache()
         {
             Clear();
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            InvalidateCache();
         }
     }
 }

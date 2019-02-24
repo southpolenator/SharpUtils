@@ -48,5 +48,21 @@ namespace SharpUtilities.Tests
                 Assert.Equal(testArray[i], arrayCache[i]);
             Assert.Equal(testArray.Length * 3, populateCount);
         }
+
+        [Fact]
+        public void Disposable()
+        {
+            int disposedCount = 0;
+            using (ArrayCache<DisposableAction> arrayCache = new ArrayCache<DisposableAction>(1, index => new DisposableAction(() => disposedCount++)))
+            {
+                var a0 = arrayCache[0];
+
+                arrayCache.Clear();
+                Assert.Equal(1, disposedCount);
+
+                var a1 = arrayCache[0];
+            }
+            Assert.Equal(2, disposedCount);
+        }
     }
 }

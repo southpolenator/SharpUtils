@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Reflection;
 
 namespace SharpUtilities
 {
@@ -39,7 +40,7 @@ namespace SharpUtilities
         /// Initializes a new instance of the <see cref="ArrayCache{TValue}"/> class.
         /// </summary>
         /// <param name="length">Length of the array.</param>
-        /// <param name="disableLocking">Disables locking during value population.</param>
+        /// <param name="disableLocking">Disables locking during value population. It is not recommended to disable locking when using <see cref="IDisposable"/> values.</param>
         /// <param name="populateAction">The populate action.</param>
         public ArrayCache(int length, bool disableLocking, Func<int, TValue> populateAction)
         {
@@ -49,11 +50,17 @@ namespace SharpUtilities
         }
 
         /// <summary>
-        /// Clears this cache.
+        /// Removes all items from this cache.
         /// </summary>
         public void Clear()
         {
+            TValue[] valuesToBeDisposed = values;
+
             values = new TValue[values.Length];
+            if (typeof(IDisposable).IsAssignableFrom(typeof(TValue)))
+                lock (this)
+                    foreach (IDisposable value in valuesToBeDisposed)
+                        value.Dispose();
         }
 
         /// <summary>
@@ -75,7 +82,7 @@ namespace SharpUtilities
                     if (disableLocking)
                         value = values[index] = populateAction(index);
                     else
-                        lock (values)
+                        lock (this)
                         {
                             value = values[index];
                             if (value == null)
@@ -106,6 +113,14 @@ namespace SharpUtilities
         public void InvalidateCache()
         {
             Clear();
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            InvalidateCache();
         }
     }
 }

@@ -65,6 +65,14 @@ namespace SharpUtilities
         }
 
         /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            InvalidateCache();
+        }
+
+        /// <summary>
         /// Gets enumerator for all the cached objects in this cache.
         /// </summary>
         public IEnumerator GetEnumerator()

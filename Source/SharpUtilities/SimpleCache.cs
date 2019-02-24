@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Reflection;
 
 namespace SharpUtilities
 {
@@ -62,7 +63,7 @@ namespace SharpUtilities
         /// <value>
         ///   <c>true</c> if cached; otherwise, <c>false</c>.
         /// </value>
-        public bool Cached { get; internal set; }
+        public bool Cached { get; private set; }
 
         /// <summary>
         /// Gets or sets the value. The value will be populated if it wasn't cached.
@@ -103,7 +104,26 @@ namespace SharpUtilities
         /// </summary>
         public void InvalidateCache()
         {
-            Cached = false;
+            if (typeof(IDisposable).IsAssignableFrom(typeof(T)))
+            {
+                if (Cached)
+                    lock (this)
+                        if (Cached)
+                        {
+                            ((IDisposable)value)?.Dispose();
+                            Cached = false;
+                        }
+            }
+            else
+                Cached = false;
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            InvalidateCache();
         }
     }
 
@@ -140,7 +160,7 @@ namespace SharpUtilities
         /// <value>
         ///   <c>true</c> if cached; otherwise, <c>false</c>.
         /// </value>
-        public bool Cached { get; internal set; }
+        public bool Cached { get; private set; }
 
         /// <summary>
         /// Gets or sets the value. The value will be populated if it wasn't cached.
@@ -171,7 +191,18 @@ namespace SharpUtilities
         /// </summary>
         public void InvalidateCache()
         {
-            Cached = false;
+            if (typeof(IDisposable).IsAssignableFrom(typeof(T)))
+            {
+                if (Cached)
+                    lock (populateAction)
+                        if (Cached)
+                        {
+                            ((IDisposable)value)?.Dispose();
+                            Cached = false;
+                        }
+            }
+            else
+                Cached = false;
         }
 
         /// <summary>
@@ -183,5 +214,15 @@ namespace SharpUtilities
             if (Cached)
                 yield return value;
         }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            InvalidateCache();
+        }
     }
 }
+
+// TODO: Add tests for Dispose methods
