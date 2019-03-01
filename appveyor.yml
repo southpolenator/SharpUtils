@@ -3,6 +3,8 @@ image: Visual Studio 2017
 configuration: Release
 install:
   - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
+  - ps: choco install opencover.portable --limitoutput --no-progress
+  - ps: choco install codecov --limitoutput --no-progress
 before_build:
   - ps: Vsix-TokenReplacement SharedAssemblyInfo.props '<AssemblyVersion>([0-9\\.]+)</AssemblyVersion>' '<AssemblyVersion>{version}</AssemblyVersion>'
   - ps: Vsix-TokenReplacement SharedAssemblyInfo.props '<FileVersion>([0-9\\.]+)</FileVersion>' '<FileVersion>{version}</FileVersion>'
@@ -11,7 +13,8 @@ build_script:
   - cmd: dotnet build
   - cmd: dotnet pack
 test_script:
-  - cmd: dotnet test
+  - cmd: OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:test -output:".\coverage.xml" -oldstyle -filter:"+[SharpUtilities*]* -[SharpUtilities.Tests*]*"
+  - cmd: codecov -f "coverage.xml"
 artifacts:
 - path: bin\**\*.nupkg
   name: NuGets

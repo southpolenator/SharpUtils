@@ -224,5 +224,3 @@ namespace SharpUtilities
         }
     }
 }
-
-// TODO: Add tests for Dispose methods
