@@ -13,7 +13,7 @@ build_script:
   - cmd: dotnet build
   - cmd: dotnet pack
 test_script:
-  - cmd: OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:test -output:".\coverage.xml" -oldstyle -filter:"+[SharpUtilities*]* -[SharpUtilities.Tests*]*"
+  - cmd: OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test --no-build" -output:".\coverage.xml" -oldstyle -filter:"+[SharpUtilities*]* -[SharpUtilities.Tests*]*"
   - cmd: codecov -f "coverage.xml"
 artifacts:
 - path: bin\**\*.nupkg
