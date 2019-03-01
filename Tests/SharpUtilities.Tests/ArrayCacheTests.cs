@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Linq;
+using Xunit;
 
 namespace SharpUtilities.Tests
 {
@@ -20,6 +21,45 @@ namespace SharpUtilities.Tests
             for (int i = 0; i < arrayCache.Count; i++)
                 Assert.Equal(testArray[i], arrayCache[i]);
             Assert.Equal(testArray.Length, populateCount);
+            for (int i = 0; i < arrayCache.Count; i++)
+                Assert.Equal(testArray[i], arrayCache[i]);
+            Assert.Equal(testArray.Length, populateCount);
+        }
+
+        [Fact]
+        public void SimpleTestNoLocking()
+        {
+            int populateCount = 0;
+            ArrayCache<string> arrayCache = new ArrayCache<string>(testArray.Length, true, index =>
+            {
+                populateCount++;
+                return testArray[index];
+            });
+
+            Assert.Equal(testArray.Length, arrayCache.Count);
+            for (int i = 0; i < arrayCache.Count; i++)
+                Assert.Equal(testArray[i], arrayCache[i]);
+            Assert.Equal(testArray.Length, populateCount);
+            for (int i = 0; i < arrayCache.Count; i++)
+                Assert.Equal(testArray[i], arrayCache[i]);
+            Assert.Equal(testArray.Length, populateCount);
+        }
+
+        [Fact]
+        public void SettingValue()
+        {
+            const string testString = "Untested string";
+            int populateCount = 0;
+            ArrayCache<string> arrayCache = new ArrayCache<string>(testArray.Length, index =>
+            {
+                populateCount++;
+                return testArray[index];
+            });
+
+            Assert.Equal(testArray.Length, arrayCache.Count);
+            arrayCache[0] = testString;
+            Assert.Equal(testString, arrayCache[0]);
+            arrayCache.Clear();
             for (int i = 0; i < arrayCache.Count; i++)
                 Assert.Equal(testArray[i], arrayCache[i]);
             Assert.Equal(testArray.Length, populateCount);
@@ -63,6 +103,23 @@ namespace SharpUtilities.Tests
                 var a1 = arrayCache[0];
             }
             Assert.Equal(2, disposedCount);
+        }
+
+        [Fact]
+        public void Enumerate()
+        {
+            int populateCount = 0;
+            ArrayCache<string> arrayCache = new ArrayCache<string>(testArray.Length, index =>
+            {
+                populateCount++;
+                return testArray[index];
+            });
+
+            Assert.Equal(testArray.Length, arrayCache.Count);
+            for (int i = 0; i < arrayCache.Count; i++)
+                Assert.Equal(testArray[i], arrayCache[i]);
+            Assert.Equal(testArray.Length, populateCount);
+            Assert.Equal(testArray, arrayCache.OfType<string>());
         }
     }
 }

@@ -30,5 +30,12 @@ namespace SharpUtilities.Tests
             Assert.Equal(-1, buffer.BytePointerLength);
             Assert.Equal(originalBytes, buffer.Bytes);
         }
+
+        [Fact]
+        public unsafe void SadPath()
+        {
+            Assert.Throws<ArgumentNullException>(() => new MemoryBuffer(null));
+            Assert.Throws<ArgumentNullException>(() => new MemoryBuffer(null, 0));
+        }
     }
 }

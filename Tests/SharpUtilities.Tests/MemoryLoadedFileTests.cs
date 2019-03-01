@@ -23,5 +23,11 @@ namespace SharpUtilities.Tests
                 }
             }
         }
+
+        [Fact]
+        public void Sad()
+        {
+            Assert.ThrowsAny<Exception>(() => new MemoryLoadedFile(Guid.NewGuid().ToString()));
+        }
     }
 }

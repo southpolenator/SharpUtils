@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using System;
+using System.Linq;
+using Xunit;
 
 namespace SharpUtilities.Tests
 {
@@ -75,6 +77,8 @@ namespace SharpUtilities.Tests
             int evaluationCount = 0;
             DictionaryCache<int, string> cache = new DictionaryCache<int, string>(key =>
             {
+                if (key == int.MaxValue)
+                    throw new NotImplementedException();
                 evaluationCount++;
                 return key.ToString();
             });
@@ -86,6 +90,7 @@ namespace SharpUtilities.Tests
             }
             Assert.Equal(values.Length, cache.Count);
             Assert.Equal(values.Length, evaluationCount);
+            Assert.False(cache.TryGetValue(int.MaxValue, out string testValue2));
         }
 
         [Fact]
@@ -107,6 +112,45 @@ namespace SharpUtilities.Tests
             Assert.True(cache.RemoveEntry(values[0], out testValue));
             Assert.False(cache.TryGetExistingValue(values[0], out testValue));
             Assert.False(cache.RemoveEntry(values[0], out testValue));
+        }
+
+        [Fact]
+        public void SetValue()
+        {
+            const string testString = "Untested string";
+            int[] values = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            int evaluationCount = 0;
+            DictionaryCache<int, string> cache = new DictionaryCache<int, string>(key =>
+            {
+                evaluationCount++;
+                return key.ToString();
+            });
+
+            Assert.Equal(0, cache.Count);
+            foreach (int value in values)
+                Assert.Equal(value.ToString(), cache[value]);
+            Assert.Equal(values.Length, cache.Count);
+            cache[int.MinValue] = testString;
+            Assert.Equal(testString, cache[int.MinValue]);
+        }
+
+        [Fact]
+        public void Enumerate()
+        {
+            int[] values = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            int evaluationCount = 0;
+            DictionaryCache<int, string> cache = new DictionaryCache<int, string>(key =>
+            {
+                evaluationCount++;
+                return key.ToString();
+            });
+
+            Assert.Equal(0, cache.Count);
+            foreach (int value in values)
+                Assert.Equal(value.ToString(), cache[value]);
+            Assert.Equal(values.Length, cache.Count);
+            Assert.Equal(values.Select(v => v.ToString()), cache.Values);
+            Assert.NotEmpty(cache);
         }
 
         [Fact]

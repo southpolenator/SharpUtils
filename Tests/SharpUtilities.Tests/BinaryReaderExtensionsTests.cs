@@ -107,6 +107,31 @@ namespace SharpUtilities.Tests
         }
 
         [Fact]
+        public void ReadSubstreamWithLength()
+        {
+            using (TempFile temp = new TempFile())
+            {
+                Guid guid = Guid.NewGuid();
+                byte[] bytes = guid.ToByteArray();
+
+                File.WriteAllBytes(temp.Path, bytes);
+                using (MemoryLoadedFile file = new MemoryLoadedFile(temp.Path))
+                {
+                    MemoryLoadedFileReader reader = new MemoryLoadedFileReader(file);
+                    IBinaryReader reader2 = reader.ReadSubstream(reader.Length);
+
+                    Assert.Equal(0, reader2.Position);
+                    Assert.Equal(reader.Length, reader2.Length);
+                    Assert.Equal(0, reader.BytesRemaining);
+                    reader2.Position = 1;
+                    Assert.Equal(1, reader2.Position);
+                    Assert.Equal(0, reader.BytesRemaining);
+                    Assert.NotEqual(reader.Position, reader2.Position);
+                }
+            }
+        }
+
+        [Fact]
         public void Align()
         {
             using (TempFile temp = new TempFile())
