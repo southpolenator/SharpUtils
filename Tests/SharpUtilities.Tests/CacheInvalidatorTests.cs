@@ -51,6 +51,8 @@ namespace SharpUtilities.Tests
             simpleCache = test.CacheInvalidator.CreateSimpleCache(() => 42);
             dictionaryCache.TryGetValue(simpleCache.Value, out string testValue);
             CacheInvalidator.InvalidateCaches(test);
+            CacheInvalidator.InvalidateCaches(null);
+            CacheInvalidator.InvalidateCaches(new CacheTestClass());
             Assert.Equal(0, dictionaryCache.Count);
             Assert.False(simpleCache.Cached);
         }
