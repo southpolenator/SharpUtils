@@ -157,7 +157,7 @@ namespace SharpUtilities.Tests
                 {
                     IBinaryReader reader = new MemoryLoadedFileReader(file).ReadSubstream();
 
-                    Assert.Equal("Test", reader.ReadCString());
+                    Assert.Equal("Test", reader.ReadCString().String);
                     Assert.Equal(0, reader.BytesRemaining);
                 }
             }
@@ -175,7 +175,7 @@ namespace SharpUtilities.Tests
                 {
                     IBinaryReader reader = new MemoryLoadedFileReader(file).ReadSubstream();
 
-                    Assert.Equal("Test", reader.ReadCStringWide());
+                    Assert.Equal("Test", reader.ReadCStringWide().ToString());
                     Assert.Equal(0, reader.BytesRemaining);
                 }
             }

@@ -112,7 +112,7 @@
         /// <summary>
         /// Reads C-style string (null terminated) from the stream.
         /// </summary>
-        public string ReadCString()
+        public StringReference ReadCString()
         {
             return ParentStream.ReadCString();
         }
@@ -120,7 +120,7 @@
         /// <summary>
         /// Reads C-style wide (2 bytes) string (null terminated) from the stream.
         /// </summary>
-        public string ReadCStringWide()
+        public StringReference ReadCStringWide()
         {
             return ParentStream.ReadCStringWide();
         }
@@ -142,6 +142,16 @@
         public void Move(uint bytes)
         {
             ParentStream.Move(bytes);
+        }
+
+        /// <summary>
+        /// Reads memory buffer from the stream.
+        /// </summary>
+        /// <param name="length">Number of bytes to read from the stream.</param>
+        /// <returns>Memory buffer read from the stream.</returns>
+        public MemoryBuffer ReadBuffer(uint length)
+        {
+            return ParentStream.ReadBuffer(length);
         }
     }
 }

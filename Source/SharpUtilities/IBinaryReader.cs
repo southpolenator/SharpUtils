@@ -58,12 +58,12 @@
         /// <summary>
         /// Reads C-style string (null terminated) from the stream.
         /// </summary>
-        string ReadCString();
+        StringReference ReadCString();
 
         /// <summary>
         /// Reads C-style wide (2 bytes) string (null terminated) from the stream.
         /// </summary>
-        string ReadCStringWide();
+        StringReference ReadCStringWide();
 
         /// <summary>
         /// Moves position by the specified bytes.
@@ -75,8 +75,15 @@
         /// Reads bytes buffer from the stream.
         /// </summary>
         /// <param name="bytes">Buffer pointer where bytes should be stored.</param>
-        /// <param name="count">Number of bytes to from the stream</param>
+        /// <param name="count">Number of bytes to copy from the stream.</param>
         unsafe void ReadBytes(byte* bytes, uint count);
+
+        /// <summary>
+        /// Reads memory buffer from the stream.
+        /// </summary>
+        /// <param name="length">Number of bytes to read from the stream.</param>
+        /// <returns>Memory buffer read from the stream.</returns>
+        MemoryBuffer ReadBuffer(uint length);
 
         /// <summary>
         /// Creates duplicate of this stream.

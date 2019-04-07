@@ -136,43 +136,35 @@ namespace SharpUtilities
         /// <summary>
         /// Reads C-style string (null terminated) from the stream.
         /// </summary>
-        public string ReadCString()
+        public StringReference ReadCString()
         {
             byte* start = pointer;
             byte* end = start;
 
             while (*end != 0)
                 end++;
-#if NET45
-            byte[] bytes = this.ReadByteArray((int)(end - start));
-
-            pointer++;
-            return Encoding.UTF8.GetString(bytes);
-#else
             pointer = end + 1;
-            return Encoding.UTF8.GetString(start, (int)(end - start));
-#endif
+
+            MemoryBuffer buffer = new MemoryBuffer(start, (int)(end - start));
+
+            return new StringReference(buffer, StringReference.Encoding.UTF8);
         }
 
         /// <summary>
         /// Reads C-style wide (2 bytes) string (null terminated) from the stream.
         /// </summary>
-        public string ReadCStringWide()
+        public StringReference ReadCStringWide()
         {
             ushort* start = (ushort*)pointer;
             ushort* end = start;
 
             while (*end != 0)
                 end++;
-#if NET45
-            byte[] bytes = this.ReadByteArray((int)((byte*)end - (byte*)start));
-
-            pointer += 2;
-            return Encoding.Unicode.GetString(bytes);
-#else
             pointer = (byte*)(end + 1);
-            return Encoding.Unicode.GetString((byte*)start, (int)((byte*)end - (byte*)start));
-#endif
+
+            MemoryBuffer buffer = new MemoryBuffer((byte*)start, (int)((byte*)end - (byte*)start));
+
+            return new StringReference(buffer, StringReference.Encoding.Unicode);
         }
 
         /// <summary>
@@ -193,6 +185,19 @@ namespace SharpUtilities
         public void Move(uint bytes)
         {
             pointer += bytes;
+        }
+
+        /// <summary>
+        /// Reads memory buffer from the stream.
+        /// </summary>
+        /// <param name="length">Number of bytes to read from the stream.</param>
+        /// <returns>Memory buffer read from the stream.</returns>
+        public MemoryBuffer ReadBuffer(uint length)
+        {
+            MemoryBuffer buffer = new MemoryBuffer(pointer, (int)length);
+
+            pointer += length;
+            return buffer;
         }
     }
 }

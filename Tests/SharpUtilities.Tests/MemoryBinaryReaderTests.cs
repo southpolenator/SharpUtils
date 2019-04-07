@@ -125,7 +125,7 @@ namespace SharpUtilities.Tests
             {
                 MemoryBinaryReader reader = new MemoryBinaryReader(memory, bytes.Length);
 
-                Assert.Equal("Test", reader.ReadCString());
+                Assert.Equal("Test", reader.ReadCString().String);
                 Assert.Equal(0, reader.BytesRemaining);
             }
         }
@@ -139,7 +139,7 @@ namespace SharpUtilities.Tests
             {
                 MemoryBinaryReader reader = new MemoryBinaryReader(memory, bytes.Length);
 
-                Assert.Equal("Test", reader.ReadCStringWide());
+                Assert.Equal("Test", reader.ReadCStringWide().String);
                 Assert.Equal(0, reader.BytesRemaining);
             }
         }

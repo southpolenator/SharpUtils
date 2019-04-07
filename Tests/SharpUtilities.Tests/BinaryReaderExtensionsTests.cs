@@ -212,7 +212,7 @@ namespace SharpUtilities.Tests
                 {
                     MemoryLoadedFileReader reader = new MemoryLoadedFileReader(file);
 
-                    Assert.Equal("Test", reader.ReadBString());
+                    Assert.Equal("Test", reader.ReadBString().String);
                     Assert.Equal(0, reader.BytesRemaining);
                 }
             }

@@ -141,12 +141,12 @@ namespace SharpUtilities
         /// Reads length prefixed UTF8 string from the stream.
         /// </summary>
         /// <param name="reader">Stream binary reader.</param>
-        public static string ReadBString(this IBinaryReader reader)
+        public static StringReference ReadBString(this IBinaryReader reader)
         {
             ushort length = reader.ReadUshort();
-            byte[] bytes = reader.ReadByteArray(length);
+            MemoryBuffer buffer = reader.ReadBuffer(length);
 
-            return Encoding.UTF8.GetString(bytes);
+            return new StringReference(buffer, StringReference.Encoding.UTF8);
         }
 
         /// <summary>
