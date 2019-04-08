@@ -15,7 +15,7 @@ namespace SharpUtilities.Tests
                 MemoryBuffer buffer = new MemoryBuffer(pointer, originalBytes.Length);
 
                 Assert.Equal(new IntPtr(pointer), new IntPtr(buffer.BytePointer));
-                Assert.Equal(originalBytes.Length, buffer.BytePointerLength);
+                Assert.Equal(originalBytes.Length, buffer.Length);
                 Assert.Equal(originalBytes, buffer.Bytes);
             }
         }
@@ -27,8 +27,18 @@ namespace SharpUtilities.Tests
             MemoryBuffer buffer = new MemoryBuffer(originalBytes);
 
             Assert.Equal(IntPtr.Zero, new IntPtr(buffer.BytePointer));
-            Assert.Equal(-1, buffer.BytePointerLength);
+            Assert.Equal(originalBytes.Length, buffer.Length);
             Assert.Equal(originalBytes, buffer.Bytes);
+        }
+
+        [Fact]
+        public unsafe void EmptyBuffer()
+        {
+            MemoryBuffer buffer = new MemoryBuffer();
+
+            Assert.Equal(IntPtr.Zero, new IntPtr(buffer.BytePointer));
+            Assert.Equal(0, buffer.Length);
+            Assert.Null(buffer.Bytes);
         }
 
         [Fact]

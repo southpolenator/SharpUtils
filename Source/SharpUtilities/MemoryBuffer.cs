@@ -56,8 +56,8 @@ namespace SharpUtilities
         public MemoryBuffer(byte[] bytes)
         {
             this.bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
+            Length = bytes.Length;
             BytePointer = null;
-            BytePointerLength = -1;
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace SharpUtilities
             if (bytePointer == null)
                 throw new ArgumentNullException(nameof(bytePointer));
             BytePointer = bytePointer;
-            BytePointerLength = length;
+            Length = length;
             bytes = null;
         }
 
@@ -81,9 +81,9 @@ namespace SharpUtilities
         {
             get
             {
-                if (bytes == null)
+                if (bytes == null && BytePointer != null)
                 {
-                    var bytes = new byte[BytePointerLength];
+                    var bytes = new byte[Length];
                     fixed (byte* destination = bytes)
                     {
                         byte* source = BytePointer;
@@ -103,8 +103,8 @@ namespace SharpUtilities
         public byte* BytePointer { get; private set; }
 
         /// <summary>
-        /// Gets the length of the memory buffer where byte pointer points.
+        /// Gets the length of memory buffer.
         /// </summary>
-        public int BytePointerLength { get; private set; }
+        public int Length { get; private set; }
     }
 }
