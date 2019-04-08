@@ -45,6 +45,16 @@
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MemoryBuffer"/> class.
+        /// </summary>
+        /// <param name="text">Cache for read string.</param>
+        public StringReference(string text)
+            : this()
+        {
+            this.text = text;
+        }
+
+        /// <summary>
         /// Gets the memory buffer that contains the string.
         /// </summary>
         public MemoryBuffer Buffer { get; private set; }
@@ -81,7 +91,7 @@
         {
 #if !NET45
             if (Buffer.BytePointer != null)
-                return ReadString(Buffer.BytePointer, Buffer.BytePointerLength, encoding);
+                return ReadString(Buffer.BytePointer, Buffer.Length, encoding);
 #endif
             return ReadString(Buffer.Bytes, encoding);
         }
@@ -115,6 +125,8 @@
         /// <returns>Converted string.</returns>
         private static string ReadString(byte[] bytes, Encoding encoding)
         {
+            if (bytes == null)
+                return null;
             switch (encoding)
             {
                 default:
