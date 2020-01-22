@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace SharpUtilities
@@ -8,7 +10,7 @@ namespace SharpUtilities
     /// Helper class for caching objects inside the array. New object will be cached on the request.
     /// </summary>
     /// <typeparam name="TValue">Type of the value.</typeparam>
-    public class ArrayCache<TValue> : ICache
+    public class ArrayCache<TValue> : ICache<TValue>
         where TValue : class
     {
         /// <summary>
@@ -102,9 +104,18 @@ namespace SharpUtilities
         /// Returns all cached values in this cache.
         /// </summary>
         /// <returns>IEnumerator of all the cache values.</returns>
-        public IEnumerator GetEnumerator()
+        public IEnumerator<TValue> GetEnumerator()
         {
-            return values.GetEnumerator();
+            return values.Where(v => v != null).GetEnumerator();
+        }
+
+        /// <summary>
+        /// Returns all cached values in this cache.
+        /// </summary>
+        /// <returns>IEnumerator of all the cache values.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return values.Where(v => v != null).GetEnumerator();
         }
 
         /// <summary>

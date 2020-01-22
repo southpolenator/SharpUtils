@@ -11,7 +11,7 @@ namespace SharpUtilities
     /// </summary>
     /// <typeparam name="TKey">Type of the key.</typeparam>
     /// <typeparam name="TValue">Type of the value.</typeparam>
-    public class DictionaryCache<TKey, TValue> : ICache
+    public class DictionaryCache<TKey, TValue> : ICache<TValue>
     {
         /// <summary>
         /// The populate action
@@ -42,8 +42,8 @@ namespace SharpUtilities
                 ConcurrentDictionary<TKey, TValue> valuesToBeDisposed = values;
 
                 values = new ConcurrentDictionary<TKey, TValue>();
-                foreach (IDisposable value in valuesToBeDisposed.Values)
-                    value.Dispose();
+                foreach (IDisposable? value in valuesToBeDisposed.Values)
+                    value?.Dispose();
             }
             else
                 values.Clear();
@@ -119,7 +119,9 @@ namespace SharpUtilities
             }
             catch (Exception)
             {
+#pragma warning disable 414, CS8653
                 userType = default(TValue);
+#pragma warning restore CS8653
                 return false;
             }
         }
@@ -138,9 +140,18 @@ namespace SharpUtilities
         /// Returns all cached values in this cache.
         /// </summary>
         /// <returns>IEnumerator of all the cache values.</returns>
-        public IEnumerator GetEnumerator()
+        public IEnumerator<TValue> GetEnumerator()
         {
-            return values.GetEnumerator();
+            return Values.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Returns all cached values in this cache.
+        /// </summary>
+        /// <returns>IEnumerator of all the cache values.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Values.GetEnumerator();
         }
 
         /// <summary>

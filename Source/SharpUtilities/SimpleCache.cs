@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace SharpUtilities
@@ -50,7 +51,7 @@ namespace SharpUtilities
     /// Helper class for caching results - it is being used as lazy evaluation
     /// </summary>
     /// <typeparam name="T">Type to be cached</typeparam>
-    public class SimpleCache<T> : ICache
+    public class SimpleCache<T> : ICache<T>
     {
         /// <summary>
         /// The populate action
@@ -69,6 +70,9 @@ namespace SharpUtilities
         public SimpleCache(Func<T> populateAction)
         {
             this.populateAction = populateAction;
+#pragma warning disable 414, CS8653
+            value = default(T);
+#pragma warning restore CS8653
         }
 
         /// <summary>
@@ -110,6 +114,16 @@ namespace SharpUtilities
         /// Gets enumerator for all the cached objects in this cache.
         /// </summary>
         /// <returns></returns>
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            if (Cached)
+                yield return value;
+        }
+
+        /// <summary>
+        /// Gets enumerator for all the cached objects in this cache.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
             if (Cached)
@@ -127,7 +141,9 @@ namespace SharpUtilities
                     lock (this)
                         if (Cached)
                         {
+#pragma warning disable 414, CS8600
                             ((IDisposable)value)?.Dispose();
+#pragma warning restore CS8600
                             Cached = false;
                         }
             }
@@ -151,7 +167,7 @@ namespace SharpUtilities
     /// This variant is meant to be used when smaller amount of memory is supposed to be used or less allocations.
     /// </remarks>
     /// <typeparam name="T">Type to be cached</typeparam>
-    public struct SimpleCacheStruct<T> : ICache
+    public struct SimpleCacheStruct<T> : ICache<T>
     {
         /// <summary>
         /// The populate action
@@ -170,7 +186,9 @@ namespace SharpUtilities
         public SimpleCacheStruct(Func<T> populateAction)
         {
             this.populateAction = populateAction;
+#pragma warning disable 414, CS8653
             value = default(T);
+#pragma warning restore CS8653
             Cached = false;
         }
 
@@ -220,12 +238,24 @@ namespace SharpUtilities
                     lock (populateAction)
                         if (Cached)
                         {
+#pragma warning disable 414, CS8600
                             ((IDisposable)value)?.Dispose();
+#pragma warning restore CS8600
                             Cached = false;
                         }
             }
             else
                 Cached = false;
+        }
+
+        /// <summary>
+        /// Gets enumerator for all the cached objects in this cache.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            if (Cached)
+                yield return value;
         }
 
         /// <summary>
@@ -278,7 +308,7 @@ namespace SharpUtilities
     /// </example>
     /// <typeparam name="T">Type to be cached</typeparam>
     /// <typeparam name="ContextType">Type of the context.</typeparam>
-    public struct SimpleCacheWithContext<T, ContextType> : ICache
+    public struct SimpleCacheWithContext<T, ContextType> : ICache<T>
         where ContextType : class
     {
         /// <summary>
@@ -305,7 +335,9 @@ namespace SharpUtilities
         {
             this.populateAction = populateAction;
             this.context = context;
+#pragma warning disable 414, CS8653
             value = default(T);
+#pragma warning restore CS8653
             Cached = false;
         }
 
@@ -328,7 +360,9 @@ namespace SharpUtilities
                     lock (context ?? (object)populateAction)
                         if (!Cached)
                         {
+#pragma warning disable 414, CS8604
                             value = populateAction(context);
+#pragma warning restore CS8604
                             Cached = true;
                         }
                 return value;
@@ -355,12 +389,24 @@ namespace SharpUtilities
                     lock (context ?? (object)populateAction)
                         if (Cached)
                         {
+#pragma warning disable 414, CS8600
                             ((IDisposable)value)?.Dispose();
+#pragma warning restore CS8600
                             Cached = false;
                         }
             }
             else
                 Cached = false;
+        }
+
+        /// <summary>
+        /// Gets enumerator for all the cached objects in this cache.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            if (Cached)
+                yield return value;
         }
 
         /// <summary>

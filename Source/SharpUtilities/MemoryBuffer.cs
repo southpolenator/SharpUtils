@@ -4,8 +4,12 @@ using System.Reflection.Emit;
 namespace SharpUtilities
 {
     /// <summary>
-    /// Helper structure that holds pointer to memory buffer or byte array
+    /// Helper structure that holds pointer to memory buffer or byte array.
     /// </summary>
+    /// <remarks>
+    /// If you store this structure somewhere on the heap, you need to know life time of the
+    /// heap object so that it doesn't last more than memory referenced with this structure.
+    /// </remarks>
     public unsafe struct MemoryBuffer
     {
         /// <summary>
@@ -25,7 +29,7 @@ namespace SharpUtilities
         /// <summary>
         /// The memory buffer bytes
         /// </summary>
-        private byte[] bytes;
+        private byte[]? bytes;
 
         static MemoryBuffer()
         {
@@ -81,7 +85,7 @@ namespace SharpUtilities
         {
             get
             {
-                if (bytes == null && BytePointer != null)
+                if (bytes == null)
                 {
                     var bytes = new byte[Length];
                     fixed (byte* destination = bytes)
@@ -106,5 +110,10 @@ namespace SharpUtilities
         /// Gets the length of memory buffer.
         /// </summary>
         public int Length { get; private set; }
+
+        /// <summary>
+        /// Tests it memory buffer is empty.
+        /// </summary>
+        public bool IsEmpty => Length <= 0;
     }
 }

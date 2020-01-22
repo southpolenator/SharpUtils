@@ -38,13 +38,16 @@ namespace SharpUtilities.Tests
 
             Assert.Equal(IntPtr.Zero, new IntPtr(buffer.BytePointer));
             Assert.Equal(0, buffer.Length);
-            Assert.Null(buffer.Bytes);
+            Assert.True(buffer.IsEmpty);
+            Assert.Empty(buffer.Bytes);
         }
 
         [Fact]
         public unsafe void SadPath()
         {
+#pragma warning disable 414, CS8625
             Assert.Throws<ArgumentNullException>(() => new MemoryBuffer(null));
+#pragma warning restore CS8625
             Assert.Throws<ArgumentNullException>(() => new MemoryBuffer(null, 0));
         }
     }

@@ -10,7 +10,8 @@ namespace SharpUtilities.Tests
         {
             StringReference s = new StringReference();
 
-            Assert.Null(s.String);
+            Assert.Equal(string.Empty, s.String);
+            Assert.True(s.IsEmpty);
         }
 
         [Fact]
@@ -19,6 +20,7 @@ namespace SharpUtilities.Tests
             StringReference s = new StringReference("Test");
 
             Assert.Equal("Test", s.ToString());
+            Assert.False(s.IsEmpty);
         }
 
         [Fact]
@@ -28,6 +30,7 @@ namespace SharpUtilities.Tests
             MemoryBuffer buffer = new MemoryBuffer(bytes);
             StringReference s = new StringReference(buffer, StringReference.Encoding.UTF8);
 
+            Assert.False(s.IsEmpty);
             Assert.Equal("Test", s.String);
         }
 
@@ -38,6 +41,7 @@ namespace SharpUtilities.Tests
             MemoryBuffer buffer = new MemoryBuffer(bytes);
             StringReference s = new StringReference(buffer, StringReference.Encoding.Unicode);
 
+            Assert.False(s.IsEmpty);
             Assert.Equal("Test", s.String);
         }
     }

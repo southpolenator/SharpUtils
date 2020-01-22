@@ -201,5 +201,65 @@ namespace SharpUtilities.Tests
                 Assert.NotEqual(reader.Position, reader2.Position);
             }
         }
+
+        [Fact]
+        public void ReadByteUnsafeAccessManaged()
+        {
+            byte[] bytes = new byte[] { 127, 128, 129, 200 };
+            MemoryBuffer buffer = new MemoryBuffer(bytes);
+            using var access = new MemoryBufferUnsafeAccess(buffer);
+            var reader = new MemoryBinaryReader(access);
+
+            for (int i = 0; i < bytes.Length; i++)
+                Assert.Equal(bytes[i], reader.ReadByte());
+            Assert.Equal(0, reader.BytesRemaining);
+        }
+
+        [Fact]
+        public void ReadByteUnsafeAccessPointer()
+        {
+            byte[] bytes = new byte[] { 127, 128, 129, 200 };
+
+            fixed (byte* memory = bytes)
+            {
+                MemoryBuffer buffer = new MemoryBuffer(memory, bytes.Length);
+                using var access = new MemoryBufferUnsafeAccess(buffer);
+                var reader = new MemoryBinaryReader(access);
+
+                for (int i = 0; i < bytes.Length; i++)
+                    Assert.Equal(bytes[i], reader.ReadByte());
+                Assert.Equal(0, reader.BytesRemaining);
+            }
+        }
+
+        [Fact]
+        public void ReadBytePinnerManaged()
+        {
+            byte[] bytes = new byte[] { 127, 128, 129, 200 };
+            MemoryBuffer buffer = new MemoryBuffer(bytes);
+            using var pinner = new MemoryBufferPinner(buffer);
+            var reader = new MemoryBinaryReader(pinner);
+
+            for (int i = 0; i < bytes.Length; i++)
+                Assert.Equal(bytes[i], reader.ReadByte());
+            Assert.Equal(0, reader.BytesRemaining);
+        }
+
+        [Fact]
+        public void ReadBytePinnerPointer()
+        {
+            byte[] bytes = new byte[] { 127, 128, 129, 200 };
+
+            fixed (byte* memory = bytes)
+            {
+                MemoryBuffer buffer = new MemoryBuffer(memory, bytes.Length);
+                using var pinner = new MemoryBufferPinner(buffer);
+                var reader = new MemoryBinaryReader(pinner);
+
+                for (int i = 0; i < bytes.Length; i++)
+                    Assert.Equal(bytes[i], reader.ReadByte());
+                Assert.Equal(0, reader.BytesRemaining);
+            }
+        }
     }
 }

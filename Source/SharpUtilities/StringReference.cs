@@ -3,6 +3,10 @@
     /// <summary>
     /// Represents string that has been read from binary reader.
     /// </summary>
+    /// <remarks>
+    /// If you store this structure somewhere on the heap, you need to know life time of the
+    /// heap object so that it doesn't last more than memory referenced with this structure.
+    /// </remarks>
     public struct StringReference
     {
         /// <summary>
@@ -29,7 +33,7 @@
         /// <summary>
         /// Cache for read string.
         /// </summary>
-        private string text;
+        private string? text;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MemoryBuffer"/> class.
@@ -58,6 +62,38 @@
         /// Gets the memory buffer that contains the string.
         /// </summary>
         public MemoryBuffer Buffer { get; private set; }
+
+        /// <summary>
+        /// Returns <c>true</c> if string is empty.
+        /// </summary>
+        public unsafe bool IsEmpty
+        {
+            get
+            {
+                if (text != null)
+                    return text == string.Empty;
+                if (Buffer.IsEmpty)
+                    return true;
+                if (encoding == Encoding.UTF8)
+                {
+#if !NET45
+                    if (Buffer.BytePointer != null)
+                        return *Buffer.BytePointer == 0;
+#endif
+                    return Buffer.Bytes[0] == 0;
+                }
+                else
+                {
+                    if (Buffer.Length < 2)
+                        return true;
+#if !NET45
+                    if (Buffer.BytePointer != null)
+                        return Buffer.BytePointer[0] == 0 && Buffer.BytePointer[1] == 0;
+#endif
+                    return Buffer.Bytes[0] == 0 && Buffer.Bytes[1] == 0;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the string from the memory buffer.
@@ -89,6 +125,8 @@
         /// <returns>Converted string.</returns>
         private unsafe string ReadString()
         {
+            if (Buffer.IsEmpty)
+                return string.Empty;
 #if !NET45
             if (Buffer.BytePointer != null)
                 return ReadString(Buffer.BytePointer, Buffer.Length, encoding);
@@ -125,8 +163,6 @@
         /// <returns>Converted string.</returns>
         private static string ReadString(byte[] bytes, Encoding encoding)
         {
-            if (bytes == null)
-                return null;
             switch (encoding)
             {
                 default:

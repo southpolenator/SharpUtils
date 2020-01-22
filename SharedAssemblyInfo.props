@@ -16,6 +16,8 @@
     <EnlistmentRoot>$(MSBuildThisFileDirectory)</EnlistmentRoot>
     <OutputPath>$(EnlistmentRoot)\bin\$(Configuration)\</OutputPath>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
 
     <!-- Enable embedding pdb -->
     <DebugSymbols>true</DebugSymbols>

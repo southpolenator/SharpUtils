@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SharpUtilities
 {
@@ -15,5 +16,12 @@ namespace SharpUtilities
         /// Invalidates this cache.
         /// </summary>
         void InvalidateCache();
+    }
+
+    /// <summary>
+    /// Generic version of interface for all caching structures.
+    /// </summary>
+    public interface ICache<T> : ICache, IEnumerable<T>
+    {
     }
 }

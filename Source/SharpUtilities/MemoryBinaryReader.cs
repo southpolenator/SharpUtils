@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace SharpUtilities
+﻿namespace SharpUtilities
 {
     /// <summary>
     /// Class that implements <see cref="IBinaryReader"/> for memory (pointer and length).
@@ -20,10 +18,30 @@ namespace SharpUtilities
         /// <summary>
         /// Initializes a new instance of the <see cref="MemoryBinaryReader"/> class.
         /// </summary>
+        /// <param name="memory">Memory buffer that we want to read</param>
+        /// <param name="length">Length of the memory buffer</param>
         public MemoryBinaryReader(byte* memory, long length)
         {
             pointer = basePointer = memory;
             Length = length;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MemoryBinaryReader"/> class.
+        /// </summary>
+        /// <param name="memoryBuffer">Memory byffer that we want to read</param>
+        public MemoryBinaryReader(MemoryBufferUnsafeAccess memoryBuffer)
+            : this(memoryBuffer.BytePointer, memoryBuffer.Length)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MemoryBinaryReader"/> class.
+        /// </summary>
+        /// <param name="memoryBuffer">Memory byffer that we want to read</param>
+        public MemoryBinaryReader(MemoryBufferPinner memoryBuffer)
+            : this(memoryBuffer.BytePointer, memoryBuffer.Length)
+        {
         }
 
         /// <summary>
