@@ -1,11 +1,11 @@
 <Project>
   <PropertyGroup>
     <!-- Nuget properties -->
-    <AssemblyVersion>1.4.5</AssemblyVersion>
-    <FileVersion>1.4.5</FileVersion>
-    <VersionPrefix>1.4.5</VersionPrefix>
+    <AssemblyVersion>1.5.0</AssemblyVersion>
+    <FileVersion>1.5.0</FileVersion>
+    <VersionPrefix>1.5.0</VersionPrefix>
     <Authors>SharpStar Team</Authors>
-    <Copyright>Copyright (C) SharpStar team 2015-2019</Copyright>
+    <Copyright>Copyright (C) SharpStar team 2015-2025</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/southpolenator/SharpUtils</PackageProjectUrl>
     <!--<PackageIconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</PackageIconUrl>-->
@@ -16,7 +16,7 @@
     <EnlistmentRoot>$(MSBuildThisFileDirectory)</EnlistmentRoot>
     <OutputPath>$(EnlistmentRoot)\bin\$(Configuration)\</OutputPath>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
 
     <!-- Enable embedding pdb -->

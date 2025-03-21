@@ -12,6 +12,7 @@ namespace SharpUtilities
     /// <typeparam name="TKey">Type of the key.</typeparam>
     /// <typeparam name="TValue">Type of the value.</typeparam>
     public class DictionaryCache<TKey, TValue> : ICache<TValue>
+        where TKey : notnull
     {
         /// <summary>
         /// The populate action
@@ -67,7 +68,7 @@ namespace SharpUtilities
         {
             get
             {
-                TValue value;
+                TValue? value;
 
                 if (!values.TryGetValue(key, out value))
                     lock (values)
@@ -95,7 +96,7 @@ namespace SharpUtilities
         /// <returns>
         ///   <c>true</c> if the <see cref="DictionaryCache{TKey, TValue}" /> contains an element with the specified key; otherwise, <c>false</c>.
         /// </returns>
-        public bool TryGetExistingValue(TKey key, out TValue value)
+        public bool TryGetExistingValue(TKey key, out TValue? value)
         {
             return values.TryGetValue(key, out value);
         }
@@ -119,9 +120,9 @@ namespace SharpUtilities
             }
             catch (Exception)
             {
-#pragma warning disable 414, CS8653
+#pragma warning disable 414, CS8653, CS8601
                 userType = default(TValue);
-#pragma warning restore CS8653
+#pragma warning restore CS8653, CS8601
                 return false;
             }
         }
@@ -131,7 +132,7 @@ namespace SharpUtilities
         /// </summary>
         /// <param name="key">Key of entry to be removed..</param>
         /// <param name="value">Value assoiated with the key that is being removed.</param>
-        public bool RemoveEntry(TKey key, out TValue value)
+        public bool RemoveEntry(TKey key, out TValue? value)
         {
             return values.TryRemove(key, out value);
         }

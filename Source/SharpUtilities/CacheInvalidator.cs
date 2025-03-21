@@ -25,6 +25,7 @@ namespace SharpUtilities
         /// <typeparam name="TValue">Dictionary cache value type.</typeparam>
         /// <param name="populateAction">Function that will populate dictionary cache entries.</param>
         public DictionaryCache<TKey, TValue> CreateDictionaryCache<TKey, TValue>(Func<TKey, TValue> populateAction)
+            where TKey : notnull
         {
             DictionaryCache<TKey, TValue>? dictionaryCache = null;
             Func<TKey, TValue> cachedPopulateAction = (key) =>
@@ -127,7 +128,7 @@ namespace SharpUtilities
             IEnumerable<FieldInfo> cacheFields =
                 typeof(T).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(fieldInfo => fieldInfo.FieldType.GetInterfaces().Contains(typeof(ICache)));
-            var invalidateCacheMethod = typeof(ICache).GetMethod(nameof(ICache.InvalidateCache));
+            var invalidateCacheMethod = typeof(ICache).GetMethod(nameof(ICache.InvalidateCache))!;
             foreach (FieldInfo cacheField in cacheFields)
             {
                 // Check if cacheField type is struct or class
@@ -137,7 +138,7 @@ namespace SharpUtilities
                 bool fieldCanBeNull = !fieldIsStruct;
 
                 // Check if cacheField is ICache<struct> or ICache<class> or just ICache
-                Type cacheInterface = cacheField.FieldType.GetInterfaces().Where(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(ICache<>)).FirstOrDefault();
+                Type? cacheInterface = cacheField.FieldType.GetInterfaces().Where(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(ICache<>)).FirstOrDefault();
                 bool internalTypeIsStruct = false;
 
                 if (cacheInterface != null)
@@ -160,7 +161,7 @@ namespace SharpUtilities
                 {
                     ilGenerator.Emit(OpCodes.Ldarg_0);
                     ilGenerator.Emit(OpCodes.Ldfld, cacheField);
-                    ilGenerator.Emit(OpCodes.Call, typeof(CacheInvalidator).GetMethod(nameof(CacheInvalidator.InvalidateCacheEntries)).MakeGenericMethod(cacheInterface.GenericTypeArguments));
+                    ilGenerator.Emit(OpCodes.Call, typeof(CacheInvalidator).GetMethod(nameof(CacheInvalidator.InvalidateCacheEntries))!.MakeGenericMethod(cacheInterface.GenericTypeArguments));
                 }
 
                 // Clear cache
@@ -250,7 +251,7 @@ namespace SharpUtilities
             (
                 nameof(Invalidate),
                 typeof(void),
-                new[] { typeof(InvalidateDelegateType).GetMethod("Invoke").GetParameters()[0].ParameterType },
+                new[] { typeof(InvalidateDelegateType).GetMethod("Invoke")!.GetParameters()[0].ParameterType },
                 typeof(T).GetTypeInfo().Module
             );
 

@@ -33,24 +33,45 @@ namespace SharpUtilities
 
         static MemoryBuffer()
         {
-            var dynamicMethod = new DynamicMethod
-            (
-                nameof(MemCpy),
-                typeof(void),
-                new[] { typeof(void*), typeof(void*), typeof(uint) },
-                typeof(MemoryBuffer)
-            );
+            try
+            {
+                var dynamicMethod = new DynamicMethod
+                (
+                    nameof(MemCpy),
+                    typeof(void),
+                    new[] { typeof(void*), typeof(void*), typeof(uint) },
+                    typeof(MemoryBuffer)
+                );
 
-            var ilGenerator = dynamicMethod.GetILGenerator();
+                var ilGenerator = dynamicMethod.GetILGenerator();
 
-            ilGenerator.Emit(OpCodes.Ldarg_0);
-            ilGenerator.Emit(OpCodes.Ldarg_1);
-            ilGenerator.Emit(OpCodes.Ldarg_2);
+                ilGenerator.Emit(OpCodes.Ldarg_0);
+                ilGenerator.Emit(OpCodes.Ldarg_1);
+                ilGenerator.Emit(OpCodes.Ldarg_2);
 
-            ilGenerator.Emit(OpCodes.Cpblk);
-            ilGenerator.Emit(OpCodes.Ret);
+                ilGenerator.Emit(OpCodes.Cpblk);
+                ilGenerator.Emit(OpCodes.Ret);
 
-            MemCpy = (MemCpyFunction)dynamicMethod.CreateDelegate(typeof(MemCpyFunction));
+                MemCpy = (MemCpyFunction)dynamicMethod.CreateDelegate(typeof(MemCpyFunction));
+            }
+            catch (Exception)
+            {
+                // Dynamic method is not supported on this platform, use slower version
+                unsafe
+                {
+#if !NET45
+                    MemCpy = (void* destination, void* source, uint size) => Buffer.MemoryCopy(source, destination, size, size);
+#else
+                    MemCpy = (void* destination, void* source, uint size) =>
+                    {
+                        byte* byteDestination = (byte*)destination;
+                        byte* byteSource = (byte*)source;
+                        for (uint i = 0; i < size; i++)
+                            byteDestination[i] = byteSource[i];
+                    };
+#endif
+                }
+            }
         }
 
         /// <summary>

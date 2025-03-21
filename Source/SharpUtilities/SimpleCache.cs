@@ -56,23 +56,21 @@ namespace SharpUtilities
         /// <summary>
         /// The populate action
         /// </summary>
-        private readonly Func<T> populateAction;
+        private readonly Func<T?> populateAction;
 
         /// <summary>
         /// The value that is cached
         /// </summary>
-        private T value;
+        private T? value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleCache{T}"/> class.
         /// </summary>
         /// <param name="populateAction">The function that populates the cache on demand.</param>
-        public SimpleCache(Func<T> populateAction)
+        public SimpleCache(Func<T?> populateAction)
         {
             this.populateAction = populateAction;
-#pragma warning disable 414, CS8653
             value = default(T);
-#pragma warning restore CS8653
         }
 
         /// <summary>
@@ -86,7 +84,7 @@ namespace SharpUtilities
         /// <summary>
         /// Gets or sets the value. The value will be populated if it wasn't cached.
         /// </summary>
-        public T Value
+        public T? Value
         {
             get
             {
@@ -117,7 +115,9 @@ namespace SharpUtilities
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             if (Cached)
+#pragma warning disable 414, CS8603
                 yield return value;
+#pragma warning restore CS8603
         }
 
         /// <summary>
@@ -172,18 +172,18 @@ namespace SharpUtilities
         /// <summary>
         /// The populate action
         /// </summary>
-        private readonly Func<T> populateAction;
+        private readonly Func<T?> populateAction;
 
         /// <summary>
         /// The value that is cached
         /// </summary>
-        private T value;
+        private T? value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleCacheStruct{T}"/> class.
         /// </summary>
         /// <param name="populateAction">The function that populates the cache on demand.</param>
-        public SimpleCacheStruct(Func<T> populateAction)
+        public SimpleCacheStruct(Func<T?> populateAction)
         {
             this.populateAction = populateAction;
 #pragma warning disable 414, CS8653
@@ -203,7 +203,7 @@ namespace SharpUtilities
         /// <summary>
         /// Gets or sets the value. The value will be populated if it wasn't cached.
         /// </summary>
-        public T Value
+        public T? Value
         {
             get
             {
@@ -255,7 +255,9 @@ namespace SharpUtilities
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             if (Cached)
+#pragma warning disable 414, CS8603
                 yield return value;
+#pragma warning restore CS8603
         }
 
         /// <summary>
@@ -314,7 +316,7 @@ namespace SharpUtilities
         /// <summary>
         /// The populate action
         /// </summary>
-        private readonly Func<ContextType, T> populateAction;
+        private readonly Func<ContextType, T?> populateAction;
 
         /// <summary>
         /// The context object.
@@ -324,14 +326,14 @@ namespace SharpUtilities
         /// <summary>
         /// The value that is cached
         /// </summary>
-        private T value;
+        private T? value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleCacheWithContext{T, ContextType}"/> class.
         /// </summary>
         /// <param name="context">The context object</param>
         /// <param name="populateAction">The function that populates the cache on demand.</param>
-        public SimpleCacheWithContext(ContextType context, Func<ContextType, T> populateAction)
+        public SimpleCacheWithContext(ContextType context, Func<ContextType, T?> populateAction)
         {
             this.populateAction = populateAction;
             this.context = context;
@@ -352,7 +354,7 @@ namespace SharpUtilities
         /// <summary>
         /// Gets or sets the value. The value will be populated if it wasn't cached.
         /// </summary>
-        public T Value
+        public T? Value
         {
             get
             {
@@ -406,7 +408,9 @@ namespace SharpUtilities
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             if (Cached)
+#pragma warning disable 414, CS8603
                 yield return value;
+#pragma warning restore CS8603
         }
 
         /// <summary>

@@ -65,7 +65,7 @@ namespace SharpUtilities.Tests
                 Assert.Equal(value.ToString(), cache[value]);
             Assert.Equal(values.Length, cache.Count);
             Assert.Equal(values.Length, evaluationCount);
-            Assert.True(cache.TryGetExistingValue(values[0], out string testValue));
+            Assert.True(cache.TryGetExistingValue(values[0], out string? testValue));
             cache.Clear();
             Assert.False(cache.TryGetExistingValue(values[0], out testValue));
         }
@@ -108,7 +108,7 @@ namespace SharpUtilities.Tests
                 Assert.Equal(value.ToString(), cache[value]);
             Assert.Equal(values.Length, cache.Count);
             Assert.Equal(values.Length, evaluationCount);
-            Assert.True(cache.TryGetExistingValue(values[0], out string testValue));
+            Assert.True(cache.TryGetExistingValue(values[0], out string? testValue));
             Assert.True(cache.RemoveEntry(values[0], out testValue));
             Assert.False(cache.TryGetExistingValue(values[0], out testValue));
             Assert.False(cache.RemoveEntry(values[0], out testValue));
